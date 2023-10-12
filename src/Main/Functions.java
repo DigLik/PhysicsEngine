@@ -20,11 +20,11 @@ public class Functions {
     public static double gravityForce(double mass1, double mass2, double distance) {
         return G * ((mass1 * mass2) / Math.pow(distance, 2));
     }
-    public static double[] sumVector(double r1, double a1, double r2, double a2) {
-        double x1 = a1 * Math.cos(r1);
-        double y1 = a1 * Math.sin(r1);
-        double x2 = a2 * Math.cos(r2);
-        double y2 = a2 * Math.sin(r2);
+    public static double[] sumVector(double alpha1, double force1, double alpha2, double force2) {
+        double x1 = force1 * Math.cos(alpha1);
+        double y1 = force1 * Math.sin(alpha1);
+        double x2 = force2 * Math.cos(alpha2);
+        double y2 = force2 * Math.sin(alpha2);
         double x = x1 + x2;
         double y = y1 + y2;
         double r = Math.atan2(y, x);

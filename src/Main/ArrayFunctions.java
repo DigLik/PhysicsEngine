@@ -4,11 +4,11 @@ package Main;
 
 import java.awt.*;
 
-public class Array {
+public class ArrayFunctions {
     public static Object[][] addObject(Object[][] array, double x, double y, double radius, double angle, double a, double mass, Color color) {
         Object[][] newArray = new Object[array.length + 1][];
         System.arraycopy(array, 0, newArray, 0, array.length);
-        newArray[array.length] = new Object[]{x, y, radius, angle, a, mass};
+        newArray[array.length] = new Object[]{x, y, radius, angle, a, mass, color};
         return newArray;
     }
 
