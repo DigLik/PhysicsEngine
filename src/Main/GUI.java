@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class GUI extends JComponent {
     public static JFrame jframe = new JFrame();
-    public Graphics graphics = jframe.getGraphics();
+    public static Graphics graphics = jframe.getGraphics();
 
     public static void createWindow() {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

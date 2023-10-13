@@ -27,8 +27,8 @@ public class Functions {
         double y2 = force2 * Math.sin(alpha2);
         double x = x1 + x2;
         double y = y1 + y2;
-        double r = Math.atan2(y, x);
-        double a = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-        return new double[]{r, a};
+        double alpha = Math.atan2(y, x);
+        double force = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        return new double[]{alpha, force};
     }
 }
