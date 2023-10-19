@@ -6,35 +6,39 @@ import java.util.concurrent.TimeUnit;
 import static Main.ArrayFunctions.*;
 import static Main.Config.*;
 import static Main.Functions.*;
-import static Main.GUI.*;
 
 public class Main {
     public static void main(String[] args) {
+        int temp = 0;
+
         Object[][] array = new Object[0][];
+        for (int i = 0; i < 100; i++) {
+            array = addObject(array,
+                    random(0, windowWidth),
+                    random(0, windowHeight),
+                    circleRadius, 0, 0,
+                    circleMass, circleColor);
+        }
 
-        array = addObject(array, 10, 10, circleRadius, 0, 0, 1 * Math.pow(10, 6), circleColor);
-        array = addObject(array, 20, 0, circleRadius, 0, 0, 1 * Math.pow(10, 6), circleColor);
-        array = addObject(array, 20, 10, circleRadius, 0, 0, 1 * Math.pow(10, 6), circleColor);
-        array = addObject(array, 20, 20, circleRadius, 0, 0, 1 * Math.pow(10, 6), circleColor);
+        GUI.createWindow();
+        Graphics graphics = GUI.jframe.getGraphics();
 
-        /*createWindow();
-        while (true) {
-            clearWindow(gui.graphics);
+        /*while (true) {
+            GUI.clearWindow(g);
             for (Object[] objects : array) {
-                drawCircle(
+                GUI.drawCircle(
                         (int) Math.round((Double) objects[0]),
                         (int) Math.round((Double) objects[1]),
                         (int) Math.round((Double) objects[2]),
-                        circleColor, gui.graphics
+                        circleColor, g
                 );
             }
-            try { Thread.sleep(1000 / FPS);
+            try { Thread.sleep(1000 / 5);
             } catch (InterruptedException ignored) {}
         }*/
-        GUI gui = new GUI();
-        createWindow();
+
         while (true) {
-            for (int q = 0; q < 100; q++) {
+            for (int q = 0; q < 1; q++) {
                 for (int i = 0; i < array.length; i++) {
                     for (int j = 0; j < array.length; j++) {
                         if (i != j) {
@@ -43,17 +47,29 @@ public class Main {
                     }
                 }
             }
-            clearWindow(graphics);
-            for (Object[] objects : array) {
-                drawCircle(
-                        (int) Math.round((Double) objects[0]),
-                        (int) Math.round((Double) objects[1]),
-                        (int) Math.round((Double) objects[2]),
-                        circleColor, graphics);
+
+            if (temp == 100) {
+                System.out.println("\n\n\n" + "Angle: " + array[0][3] + "\n" + "Force: " + array[0][4]);
+                System.out.println("\n" + "X: " + array[0][0] + "\n" + "Y: " + array[0][1]);
+                temp = 0;
             }
-            System.out.println("\n\n\n" + "Angle: " + array[0][3] + "\n" + "Force: " + array[0][4]);
+
+            for (int i = 0; i < array.length; i++) {
+                array[i][0] = (Double) array[i][0] + Math.cos((Double) array[i][3]) * (Double) array[i][4];
+                array[i][1] = (Double) array[i][1] + Math.sin((Double) array[i][3]) * (Double) array[i][4];
+            }
+
+            GUI.clearWindow(graphics);
+            for (int i = 0; i < array.length; i++) {
+                GUI.drawCircle(
+                        (int) Math.round((Double) array[i][0]),
+                        (int) Math.round((Double) array[i][1]),
+                        (int) Math.round((Double) array[i][2]),
+                        (Color) array[i][6], graphics);
+            }
+
             try {
-                TimeUnit.MILLISECONDS.sleep(1000/165);
+                TimeUnit.MILLISECONDS.sleep(1000/FPS);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

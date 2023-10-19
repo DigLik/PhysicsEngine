@@ -5,7 +5,6 @@ import java.awt.*;
 
 public class GUI extends JComponent {
     public static JFrame jframe = new JFrame();
-    public static Graphics graphics = jframe.getGraphics();
 
     public static void createWindow() {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,12 +20,20 @@ public class GUI extends JComponent {
     }
 
     public static void clearWindow(Graphics g) {
-        g.setColor(Config.backgroundColor);
-        g.fillRect(0, 0, Config.windowWidth, Config.windowHeight);
+        try {
+            g.setColor(Config.backgroundColor);
+            g.fillRect(0, 0, Config.windowWidth, Config.windowHeight);
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
     }
 
     public static void drawCircle(int x, int y, int radius, Color color, Graphics g) {
-        g.setColor(color);
-        g.fillOval(x, y, radius, radius);
+        try {
+            g.setColor(color);
+            g.fillOval(x, y, radius, radius);
+        } catch (Exception exception) {
+            System.out.println(exception);
+        }
     }
 }

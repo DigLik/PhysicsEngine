@@ -6,10 +6,12 @@ public class Config {
     static Toolkit toolkit = Toolkit.getDefaultToolkit();
     public static int displayHeight = toolkit.getScreenSize().height;
     public static int displayWidth = toolkit.getScreenSize().width;
-    public static int windowHeight = 400, windowWidth = 600;
+    public static int windowHeight = 800, windowWidth = 1600;
     public static Color backgroundColor = Color.BLACK;
     public static Color circleColor = Color.WHITE;
-    public static int circleRadius = 20;
-    public static int circleMass = 1000;
+    public static int circleRadius = 25;
+    public static double circleMass = Math.pow(10, 6);
+    public static double G = 6.67430e-11;
+    public static double deltaT = Math.pow(10, 7);
     public static int FPS = 165;
 }

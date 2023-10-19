@@ -1,7 +1,8 @@
 package Main;
 
+import static Main.Config.*;
+
 public class Functions {
-    public static double G = 6.67430e-11;
     public static int random(int min, int max) {
         return (int) Math.round(Math.random() * (max - min + 1) + min);
     }
@@ -18,7 +19,8 @@ public class Functions {
         return Math.atan2(legY, legX);
     }
     public static double gravityForce(double mass1, double mass2, double distance) {
-        return G * ((mass1 * mass2) / Math.pow(distance, 2));
+        if (distance <= circleRadius) {return 0;}
+        return G * ((mass1 * mass2) / Math.pow(distance, 1)) * deltaT;
     }
     public static double[] sumVector(double alpha1, double force1, double alpha2, double force2) {
         double x1 = force1 * Math.cos(alpha1);
