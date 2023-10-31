@@ -9,8 +9,6 @@ import static Main.Functions.*;
 
 public class Main {
     public static void main(String[] args) {
-        int temp = 0;
-
         Object[][] array = new Object[0][];
         for (int i = 0; i < 100; i++) {
             array = addObject(array,
@@ -20,52 +18,22 @@ public class Main {
                     circleMass, circleColor);
         }
 
+        physicsThread physics = new physicsThread(array);
+        physics.start();
+
         GUI.createWindow();
         Graphics graphics = GUI.jframe.getGraphics();
 
-        /*while (true) {
-            GUI.clearWindow(g);
+        while (true) {
+            array = physics.getArray();
+
+            GUI.clearWindow(graphics);
             for (Object[] objects : array) {
                 GUI.drawCircle(
                         (int) Math.round((Double) objects[0]),
                         (int) Math.round((Double) objects[1]),
                         (int) Math.round((Double) objects[2]),
-                        circleColor, g
-                );
-            }
-            try { Thread.sleep(1000 / 5);
-            } catch (InterruptedException ignored) {}
-        }*/
-
-        while (true) {
-            for (int q = 0; q < 1; q++) {
-                for (int i = 0; i < array.length; i++) {
-                    for (int j = 0; j < array.length; j++) {
-                        if (i != j) {
-                            array[i] = objectsPhysicsCalculation(array[i], array[j]);
-                        }
-                    }
-                }
-            }
-
-            if (temp == 100) {
-                System.out.println("\n\n\n" + "Angle: " + array[0][3] + "\n" + "Force: " + array[0][4]);
-                System.out.println("\n" + "X: " + array[0][0] + "\n" + "Y: " + array[0][1]);
-                temp = 0;
-            }
-
-            for (int i = 0; i < array.length; i++) {
-                array[i][0] = (Double) array[i][0] + Math.cos((Double) array[i][3]) * (Double) array[i][4];
-                array[i][1] = (Double) array[i][1] + Math.sin((Double) array[i][3]) * (Double) array[i][4];
-            }
-
-            GUI.clearWindow(graphics);
-            for (int i = 0; i < array.length; i++) {
-                GUI.drawCircle(
-                        (int) Math.round((Double) array[i][0]),
-                        (int) Math.round((Double) array[i][1]),
-                        (int) Math.round((Double) array[i][2]),
-                        (Color) array[i][6], graphics);
+                        (Color) objects[6], graphics);
             }
 
             try {
@@ -91,5 +59,34 @@ public class Main {
     }
     public static double force(Object[] object1, Object[] object2) {
         return gravityForce((Double) object1[2], (Double) object2[2], distance(object1, object2));
+    }
+}
+
+class physicsThread extends Thread {
+    private Object[][] array;
+
+    public physicsThread(Object[][] tempArray) {
+        this.array = tempArray;
+    }
+
+    public void run() {
+        while (true) {
+            for (int i = 0; i < array.length; i++) {
+                for (int j = 0; j < array.length; j++) {
+                    if (i != j) {
+                        array[i] = Main.objectsPhysicsCalculation(array[i], array[j]);
+                    }
+                }
+            }
+
+            for (int i = 0; i < array.length; i++) {
+                array[i][0] = (Double) array[i][0] + Math.cos((Double) array[i][3]) * (Double) array[i][4];
+                array[i][1] = (Double) array[i][1] + Math.sin((Double) array[i][3]) * (Double) array[i][4];
+            }
+        }
+    }
+
+    public Object[][] getArray() {
+        return array;
     }
 }

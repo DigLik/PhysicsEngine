@@ -19,7 +19,7 @@ public class Functions {
         return Math.atan2(legY, legX);
     }
     public static double gravityForce(double mass1, double mass2, double distance) {
-        if (distance <= circleRadius) {return 0;}
+        if (distance <= circleRadius) {return -1;}
         return G * ((mass1 * mass2) / Math.pow(distance, 1)) * deltaT;
     }
     public static double[] sumVector(double alpha1, double force1, double alpha2, double force2) {
