@@ -9,9 +9,9 @@ public class Config {
     public static int windowHeight = 800, windowWidth = 1600;
     public static Color backgroundColor = Color.BLACK;
     public static Color circleColor = Color.WHITE;
-    public static int circleRadius = 25;
+    public static double circleRadius = 25;
     public static double circleMass = Math.pow(10, 6);
     public static double G = 6.67430e-11;
-    public static double deltaT = Math.pow(10, 6);
+    public static double deltaT = Math.pow(10, 1);
     public static int FPS = 60;
 }

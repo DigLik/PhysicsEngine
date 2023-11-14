@@ -28,9 +28,9 @@ public class GUI extends JComponent {
         }
     }
 
-    public static void drawCircle(int x, int y, int radius, Color color, Graphics g) {
+    public static void drawCircle(int x, int y, int radius, Graphics g) {
         try {
-            g.setColor(color);
+            g.setColor(Config.circleColor);
             g.fillOval(x, y, radius, radius);
         } catch (Exception exception) {
             System.out.println(exception);

@@ -1,21 +1,23 @@
 package Main;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-import static Main.ArrayFunctions.*;
 import static Main.Config.*;
 import static Main.Functions.*;
 
 public class Main {
     public static void main(String[] args) {
-        Object[][] array = new Object[0][];
+        ArrayList<ArrayList<Double>> array = new ArrayList<>();
+
         for (int i = 0; i < 100; i++) {
-            array = addObject(array,
+            array.add(new ArrayList<>(Arrays.asList(
                     random(0, windowWidth),
                     random(0, windowHeight),
-                    circleRadius, 0, 0,
-                    circleMass, circleColor);
+                    circleRadius, 0.0, 0.0,
+                    circleMass)));
         }
 
         physicsThread physics = new physicsThread(array);
@@ -28,12 +30,12 @@ public class Main {
             array = physics.getArray();
 
             GUI.clearWindow(graphics);
-            for (Object[] objects : array) {
+            for (ArrayList<Double> objects : array) {
                 GUI.drawCircle(
-                        (int) Math.round((Double) objects[0]),
-                        (int) Math.round((Double) objects[1]),
-                        (int) Math.round((Double) objects[2]),
-                        (Color) objects[6], graphics);
+                        (int) Math.round((Double) objects.get(0)),
+                        (int) Math.round((Double) objects.get(1)),
+                        (int) Math.round((Double) objects.get(2)),
+                        graphics);
             }
 
             try {
@@ -43,50 +45,48 @@ public class Main {
             }
         }
     }
-    public static Object[] objectsPhysicsCalculation(Object[] object1, Object[] object2) {
+    public static ArrayList<Double> objectsPhysicsCalculation(ArrayList<Double> object1, ArrayList<Double> object2) {
         double alpha1 = alpha(object1, object2);
         double totalForce = force(object2, object1);
-        double force1 = (totalForce * (Double) object2[5]) / ((Double) object1[5] + (Double) object2[5]);
-        double[] sumVector = sumVector(alpha1, force1, (Double) object1[3], (Double) object2[4]);
-        return new Object[]
-                {object1[0], object1[1], object1[2], sumVector[0], sumVector[1], object1[5], object1[6]};
+        double force1 = (totalForce * object2.get(5)) / (object1.get(5) + object2.get(5));
+        double[] sumVector = sumVector(alpha1, force1, object1.get(3), object2.get(4));
+        return new ArrayList<>(Arrays.asList(object1.get(0), object1.get(1), object1.get(2), sumVector[0], sumVector[1], object1.get(5)));
     }
-    public static double distance(Object[] object1, Object[] object2) {
-        return hypotenuse(legX((Double) object1[0], (Double) object2[0]), legY((Double) object1[1], (Double) object2[1]));
+    public static double distance(ArrayList<Double> object1, ArrayList<Double> object2) {
+        return hypotenuse(legX(object1.get(0), object2.get(0)), legY(object1.get(1), object2.get(1)));
     }
-    public static double alpha(Object[] object1, Object[] object2) {
-        return angle(legX((Double) object1[0], (Double) object2[0]), legY((Double) object1[1], (Double) object2[1]));
+    public static double alpha(ArrayList<Double> object1, ArrayList<Double> object2) {
+        return angle(legX(object1.get(0), object2.get(0)), legY(object1.get(1), object2.get(1)));
     }
-    public static double force(Object[] object1, Object[] object2) {
-        return gravityForce((Double) object1[2], (Double) object2[2], distance(object1, object2));
+    public static double force(ArrayList<Double> object1, ArrayList<Double> object2) {
+        return gravityForce(object1.get(5), object2.get(2), distance(object1, object2));
     }
 }
 
 class physicsThread extends Thread {
-    private Object[][] array;
+    private ArrayList<ArrayList<Double>> array;
 
-    public physicsThread(Object[][] tempArray) {
+    public physicsThread(ArrayList<ArrayList<Double>> tempArray) {
         this.array = tempArray;
     }
 
     public void run() {
         while (true) {
-            for (int i = 0; i < array.length; i++) {
-                for (int j = 0; j < array.length; j++) {
+            for (int i = 0; i < array.size(); i++) {
+                for (int j = 0; j < array.size(); j++) {
                     if (i != j) {
-                        array[i] = Main.objectsPhysicsCalculation(array[i], array[j]);
+                        array.set(i, Main.objectsPhysicsCalculation(array.get(i), array.get(j)));
                     }
                 }
             }
 
-            for (int i = 0; i < array.length; i++) {
-                array[i][0] = (Double) array[i][0] + Math.cos((Double) array[i][3]) * (Double) array[i][4];
-                array[i][1] = (Double) array[i][1] + Math.sin((Double) array[i][3]) * (Double) array[i][4];
+            for (int i = 0; i < array.size(); i++) {
+                array.get(i).set(0, array.get(i).get(0) + Math.cos(array.get(i).get(3)) * array.get(i).get(4));
+                array.get(i).set(1, array.get(i).get(1) + Math.sin(array.get(i).get(3)) * array.get(i).get(4));
             }
         }
     }
-
-    public Object[][] getArray() {
+    public ArrayList<ArrayList<Double>> getArray() {
         return array;
     }
 }
