@@ -3,8 +3,8 @@ package Main;
 import static Main.Config.*;
 
 public class Functions {
-    public static double random(double min, double max) {
-        return (int) Math.round(Math.random() * (max - min + 1) + min);
+    public static double random(double max) {
+        return (int) Math.round(Math.random() * max);
     }
     public static double hypotenuse(double x, double y) {
         return Math.hypot(x, y);
@@ -19,8 +19,8 @@ public class Functions {
         return Math.atan2(legY, legX);
     }
     public static double gravityForce(double mass1, double mass2, double distance) {
-        if (distance <= circleRadius) {return -0.1;}
-        return G * ((mass1 * mass2) / Math.pow(distance, 1)) * deltaT;
+        if (distance <= circleRadius) {return 0;}
+        return G * ((mass1 * mass2) / Math.pow(distance, 2)) * deltaT;
     }
     public static double[] sumVector(double alpha1, double force1, double alpha2, double force2) {
         double x1 = force1 * Math.cos(alpha1);

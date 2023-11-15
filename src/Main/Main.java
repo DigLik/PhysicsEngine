@@ -1,6 +1,7 @@
 package Main;
 
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -9,13 +10,13 @@ import static Main.Config.*;
 import static Main.Functions.*;
 
 public class Main {
+    public static ArrayList<ArrayList<Double>> array = new ArrayList<>();
     public static void main(String[] args) {
-        ArrayList<ArrayList<Double>> array = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             array.add(new ArrayList<>(Arrays.asList(
-                    random(0, windowWidth),
-                    random(0, windowHeight),
+                    random(windowWidth),
+                    random(windowHeight),
                     circleRadius, 0.0, 0.0,
                     circleMass)));
         }
@@ -24,20 +25,23 @@ public class Main {
         physics.start();
 
         GUI.createWindow();
-        Graphics graphics = GUI.jframe.getGraphics();
+        Canvas canvas = new Canvas();
+        GUI.jframe.add(canvas);
+        canvas.createBufferStrategy(2);
+        BufferStrategy buffer = canvas.getBufferStrategy();
 
         while (true) {
             array = physics.getArray();
 
-            GUI.clearWindow(graphics);
+            GUI.clearWindow(buffer.getDrawGraphics());
             for (ArrayList<Double> objects : array) {
                 GUI.drawCircle(
-                        (int) Math.round((Double) objects.get(0)),
-                        (int) Math.round((Double) objects.get(1)),
-                        (int) Math.round((Double) objects.get(2)),
-                        graphics);
+                        (int) Math.round(objects.get(0)),
+                        (int) Math.round(objects.get(1)),
+                        (int) Math.round(objects.get(2)),
+                        buffer.getDrawGraphics());
             }
-
+            buffer.show();
             try {
                 TimeUnit.MILLISECONDS.sleep(1000/FPS);
             } catch (InterruptedException e) {

@@ -15,7 +15,7 @@ public class GUI extends JComponent {
                 Config.displayWidth  / 2 - Config.windowWidth  / 2,
                 Config.displayHeight / 2 - Config.windowHeight / 2
         );
-        jframe.getContentPane().add(new GUI());
+        jframe.setResizable(false);
         jframe.setVisible(true);
     }
 

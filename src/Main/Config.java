@@ -13,5 +13,5 @@ public class Config {
     public static double circleMass = Math.pow(10, 6);
     public static double G = 6.67430e-11;
     public static double deltaT = Math.pow(10, 1);
-    public static int FPS = 60;
+    public static int FPS = 165;
 }
