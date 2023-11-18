@@ -4,16 +4,18 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static Main.Config.*;
 import static Main.Functions.*;
+import static Main.vectorFunctions.*;
 
 public class Main {
     public static ArrayList<ArrayList<Double>> array = new ArrayList<>();
-    public static void main(String[] args) {
 
-        for (int i = 0; i < 10; i++) {
+    public static void main(String[] args) {
+        for (int i = 0; i < circleCount; i++) {
             array.add(new ArrayList<>(Arrays.asList(
                     random(windowWidth),
                     random(windowHeight),
@@ -31,17 +33,16 @@ public class Main {
         BufferStrategy buffer = canvas.getBufferStrategy();
 
         while (true) {
-            array = physics.getArray();
-
             GUI.clearWindow(buffer.getDrawGraphics());
+
             for (ArrayList<Double> objects : array) {
                 GUI.drawCircle(
                         (int) Math.round(objects.get(0)),
                         (int) Math.round(objects.get(1)),
                         (int) Math.round(objects.get(2)),
-                        buffer.getDrawGraphics());
-            }
+                        buffer.getDrawGraphics());}
             buffer.show();
+
             try {
                 TimeUnit.MILLISECONDS.sleep(1000/FPS);
             } catch (InterruptedException e) {
@@ -49,48 +50,45 @@ public class Main {
             }
         }
     }
+
     public static ArrayList<Double> objectsPhysicsCalculation(ArrayList<Double> object1, ArrayList<Double> object2) {
-        double alpha1 = alpha(object1, object2);
-        double totalForce = force(object2, object1);
-        double force1 = (totalForce * object2.get(5)) / (object1.get(5) + object2.get(5));
-        double[] sumVector = sumVector(alpha1, force1, object1.get(3), object2.get(4));
-        return new ArrayList<>(Arrays.asList(object1.get(0), object1.get(1), object1.get(2), sumVector[0], sumVector[1], object1.get(5)));
-    }
-    public static double distance(ArrayList<Double> object1, ArrayList<Double> object2) {
-        return hypotenuse(legX(object1.get(0), object2.get(0)), legY(object1.get(1), object2.get(1)));
-    }
-    public static double alpha(ArrayList<Double> object1, ArrayList<Double> object2) {
-        return angle(legX(object1.get(0), object2.get(0)), legY(object1.get(1), object2.get(1)));
-    }
-    public static double force(ArrayList<Double> object1, ArrayList<Double> object2) {
-        return gravityForce(object1.get(5), object2.get(2), distance(object1, object2));
+        double x1 = object1.get(0), y1 = object1.get(1);
+        double angle = getAngle(object1, object2);
+        double force = gravityForce(object1, object2) / object1.get(5);
+
+        if (x1 < 0 || x1 > windowWidth - object1.get(2))
+            object1.set(3, -object1.get(3));
+        if (y1 < 0 || y1 > windowHeight - object1.get(2))
+            object1.set(4, -object1.get(4));
+
+        double x = Math.cos(angle) * force + object1.get(3);
+        double y = Math.sin(angle) * force + object1.get(4);
+
+        return new ArrayList<>(List.of(object1.get(0) + x, object1.get(1) + y, object1.get(2), x, y, object1.get(5)));
     }
 }
 
 class physicsThread extends Thread {
-    private ArrayList<ArrayList<Double>> array;
+    private ArrayList<ArrayList<Double>> tempArray;
 
-    public physicsThread(ArrayList<ArrayList<Double>> tempArray) {
-        this.array = tempArray;
+    public physicsThread(ArrayList<ArrayList<Double>> array) {
+        this.tempArray = array;
     }
-
     public void run() {
         while (true) {
-            for (int i = 0; i < array.size(); i++) {
-                for (int j = 0; j < array.size(); j++) {
+            for (int i = 0; i < tempArray.size(); i++) {
+                for (int j = 0; j < tempArray.size(); j++) {
                     if (i != j) {
-                        array.set(i, Main.objectsPhysicsCalculation(array.get(i), array.get(j)));
+                        tempArray.set(i, Main.objectsPhysicsCalculation(tempArray.get(i), tempArray.get(j)));
                     }
                 }
             }
-
-            for (int i = 0; i < array.size(); i++) {
-                array.get(i).set(0, array.get(i).get(0) + Math.cos(array.get(i).get(3)) * array.get(i).get(4));
-                array.get(i).set(1, array.get(i).get(1) + Math.sin(array.get(i).get(3)) * array.get(i).get(4));
+            Main.array = tempArray;
+            try {
+                TimeUnit.MILLISECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
-    }
-    public ArrayList<ArrayList<Double>> getArray() {
-        return array;
     }
 }

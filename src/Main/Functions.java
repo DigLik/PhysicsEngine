@@ -1,36 +1,24 @@
 package Main;
 
+import java.util.ArrayList;
+
 import static Main.Config.*;
 
 public class Functions {
     public static double random(double max) {
-        return (int) Math.round(Math.random() * max);
+        return (int) Math.round(Math.random() * (max - circleRadius));
     }
-    public static double hypotenuse(double x, double y) {
-        return Math.hypot(x, y);
+}
+
+class vectorFunctions {
+    public static double getAngle(ArrayList<Double> object1, ArrayList<Double> object2) {
+        return Math.atan2(object2.get(1) - object1.get(1), object2.get(0) - object1.get(0));
     }
-    public static double legX(double x1, double x2) {
-        return x2 - x1;
+    public static double distance(ArrayList<Double> object1, ArrayList<Double> object2) {
+        return Math.sqrt(Math.pow(object1.get(0) - object2.get(0), 2) + Math.pow(object2.get(1) - object1.get(1), 2));
     }
-    public static double legY(double y1, double y2) {
-        return y2 - y1;
-    }
-    public static double angle(double legX , double legY) {
-        return Math.atan2(legY, legX);
-    }
-    public static double gravityForce(double mass1, double mass2, double distance) {
-        if (distance <= circleRadius) {return 0;}
-        return G * ((mass1 * mass2) / Math.pow(distance, 2)) * deltaT;
-    }
-    public static double[] sumVector(double alpha1, double force1, double alpha2, double force2) {
-        double x1 = force1 * Math.cos(alpha1);
-        double y1 = force1 * Math.sin(alpha1);
-        double x2 = force2 * Math.cos(alpha2);
-        double y2 = force2 * Math.sin(alpha2);
-        double x = x1 + x2;
-        double y = y1 + y2;
-        double alpha = Math.atan2(y, x);
-        double force = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-        return new double[]{alpha, force};
+    public static double gravityForce(ArrayList<Double> object1, ArrayList<Double> object2) {
+        if (distance(object1, object2) < circleRadius) return -1.0;
+        else return G * (object1.get(5) * object2.get(5)) / Math.pow(distance(object1, object2), 1) * deltaT;
     }
 }

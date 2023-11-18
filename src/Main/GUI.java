@@ -10,11 +10,12 @@ public class GUI extends JComponent {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setTitle("Windows");
         jframe.setBackground(Config.backgroundColor);
-        jframe.setSize(Config.windowWidth, Config.windowHeight);
+        jframe.getContentPane().setPreferredSize(new java.awt.Dimension(Config.windowWidth, Config.windowHeight));
         jframe.setLocation(
                 Config.displayWidth  / 2 - Config.windowWidth  / 2,
                 Config.displayHeight / 2 - Config.windowHeight / 2
         );
+        jframe.pack();
         jframe.setResizable(false);
         jframe.setVisible(true);
     }
