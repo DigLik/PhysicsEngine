@@ -19,6 +19,6 @@ class vectorFunctions {
     }
     public static double gravityForce(ArrayList<Double> object1, ArrayList<Double> object2) {
         if (distance(object1, object2) < circleRadius) return -1.0;
-        else return G * (object1.get(5) * object2.get(5)) / Math.pow(distance(object1, object2), 1) * deltaT;
+        else return G * (object1.get(5) * object2.get(5)) / Math.pow(distance(object1, object2), 2) * deltaT;
     }
 }

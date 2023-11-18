@@ -3,7 +3,6 @@ package Main;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) {
         for (int i = 0; i < circleCount; i++) {
-            array.add(new ArrayList<>(Arrays.asList(
+            array.add(new ArrayList<>(List.of(
                     random(windowWidth),
                     random(windowHeight),
                     circleRadius, 0.0, 0.0,
