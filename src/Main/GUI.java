@@ -8,7 +8,7 @@ public class GUI extends JComponent {
 
     public static void createWindow() {
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        jframe.setTitle("Windows");
+        jframe.setTitle("PhysicsEngine");
         jframe.setBackground(Config.backgroundColor);
         jframe.getContentPane().setPreferredSize(new java.awt.Dimension(Config.windowWidth, Config.windowHeight));
         jframe.setLocation(
@@ -21,20 +21,12 @@ public class GUI extends JComponent {
     }
 
     public static void clearWindow(Graphics g) {
-        try {
-            g.setColor(Config.backgroundColor);
-            g.fillRect(0, 0, Config.windowWidth, Config.windowHeight);
-        } catch (Exception exception) {
-            System.out.println(exception);
-        }
+        g.setColor(Config.backgroundColor);
+        g.fillRect(0, 0, Config.windowWidth, Config.windowHeight);
     }
 
     public static void drawCircle(int x, int y, int radius, Graphics g) {
-        try {
-            g.setColor(Config.circleColor);
-            g.fillOval(x, y, radius, radius);
-        } catch (Exception exception) {
-            System.out.println(exception);
-        }
+        g.setColor(Config.circleColor);
+        g.fillOval(x, y, radius, radius);
     }
 }

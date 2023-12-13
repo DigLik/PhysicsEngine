@@ -21,6 +21,6 @@ public class Functions {
         return Math.atan2(vector.get(1), vector.get(0));
     }
     public static double gravityForce(ArrayList<Double> object1, ArrayList<Double> object2) {
-        return G * (object1.get(5) * object2.get(5) / Math.pow(distance(object1, object2), 2)) * deltaT;
+        return G * (object1.get(5) * object2.get(5) / Math.pow(distance(object1, object2), 2));
     }
 }

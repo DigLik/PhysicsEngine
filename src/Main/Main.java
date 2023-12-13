@@ -53,25 +53,26 @@ public class Main {
         double x1 = object1.get(0), y1 = object1.get(1);
         double v1f_x, v1f_y, v2f_x, v2f_y;
 
-        if (distance(object1, object2) <= circleDiameter) {
+        if (distance(object1, object2) <= object1.get(2)/2 + object2.get(2)/2) {
             double v1i_x = object1.get(3), v1i_y = object1.get(4);
             double v2i_x = object2.get(3), v2i_y = object2.get(4);
             double m1 = object1.get(5), m2 = object2.get(5);
-            v1f_x = ((m2 - m1) * v2i_x + 2 * m1 * v2i_x) / (m1 + m2);
-            v1f_y = ((m2 - m1) * v2i_y + 2 * m1 * v2i_y) / (m1 + m2);
-            v2f_x = ((m1 - m2) * v1i_x + 2 * m2 * v1i_x) / (m1 + m2);
-            v2f_y = ((m1 - m2) * v1i_y + 2 * m2 * v1i_y) / (m1 + m2);
+            double e = elasticityCoefficient;
+            v1f_x = ((m2 - e * m1) * v1i_x + (1 + e) * m2 * v2i_x) / (m1 + m2);
+            v1f_y = ((m2 - e * m1) * v1i_y + (1 + e) * m2 * v2i_y) / (m1 + m2);
+            v2f_x = ((m1 - e * m2) * v2i_x + (1 + e) * m1 * v1i_x) / (m1 + m2);
+            v2f_y = ((m1 - e * m2) * v2i_y + (1 + e) * m1 * v1i_y) / (m1 + m2);
             object2.set(3, v2f_x);
             object2.set(4, v2f_y);
             array.set(array.indexOf(object2), object2);
         } else {
             double angle = getAngle(object1, object2);
-            double force = gravityForce(object1, object2) / object1.get(5);
+            double force = gravityForce(object1, object2) / object1.get(5) * deltaT;
             v1f_x = Math.cos(angle) * force + object1.get(3);
             v1f_y = Math.sin(angle) * force + object1.get(4);
         }
 
-        if (distance(object1, object2) <= circleDiameter) {
+        if (distance(object1, object2) < circleDiameter) {
             object1.set(0, x1 - (circleDiameter - distance(object1, object2)) * Math.cos(getAngle(object1, object2)));
             object1.set(1, y1 - (circleDiameter - distance(object1, object2)) * Math.sin(getAngle(object1, object2)));
         }
